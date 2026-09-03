@@ -32,8 +32,8 @@ export const resumeUrl =
 
 export const sections: SectionLink[] = [
   { id: "experience", label: "Experience" },
-  { id: "videos", label: "Videos" },
   { id: "projects", label: "Projects" },
+  { id: "videos", label: "Videos" },
   { id: "hackathons", label: "Hackathons" },
 ];
 

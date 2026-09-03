@@ -22,7 +22,7 @@ export async function Hackathons() {
                   // aspect box rather than driving the layout itself. An SVG is a
                   // wordmark or logo often enough that cropping one looks broken,
                   // so those are fitted whole instead.
-                  <div className="relative aspect-video w-full shrink-0 bg-muted lg:aspect-auto lg:w-[45%]">
+                  <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-t-xl bg-muted lg:aspect-auto lg:w-[45%] lg:rounded-l-xl lg:rounded-tr-none">
                     <Image
                       src={hackathon.thumbnailUrl}
                       alt=""
@@ -36,15 +36,18 @@ export async function Hackathons() {
                     />
                   </div>
                 )}
-                <CardContent className="p-4">
+                <CardContent className="flex min-w-0 flex-1 flex-col p-4">
                   <h3 className="text-xl font-bold leading-tight">{hackathon.title}</h3>
-                  <p className="text-base text-muted-foreground">{hackathon.date}</p>
+                  <p className="text-base text-muted-foreground">
+                    {hackathon.projectName !== null && <>{hackathon.projectName} &middot; </>}
+                    {hackathon.date}
+                  </p>
                   {/*
                     Equal shares of the card width, however many proof links an
                     entry has. Grid rather than flex: flex would clamp each link
                     at its own label width, leaving the widest one bigger.
                   */}
-                  <ul className="mt-3 grid grid-flow-col auto-cols-fr gap-2">
+                  <ul className="mt-auto grid grid-flow-col auto-cols-fr gap-2 pt-3">
                     {hackathon.links.map(link => (
                       <li key={link.url}>
                         <a

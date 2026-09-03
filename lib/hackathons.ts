@@ -1,6 +1,6 @@
 import { fetchProfileReadme } from "@/lib/profile-readme";
 import { requireSection } from "@/lib/readme";
-import { fetchRepoThumbnail, parseRepoRef } from "@/lib/repo-readme";
+import { fetchRepoThumbnail, parseRepoRef, type RepoRef } from "@/lib/repo-readme";
 
 export interface ProofLink {
   label: string;
@@ -16,6 +16,8 @@ export interface HackathonSource {
 export interface Hackathon extends HackathonSource {
   /** Null when no proof link is a repo, or that repo's README has no image. */
   thumbnailUrl: string | null;
+  /** The linked repo's name, or null when no proof link is a repo. */
+  projectName: string | null;
 }
 
 const HACKATHONS_HEADING = "Hackathons";
@@ -75,11 +77,14 @@ export async function getHackathons(): Promise<Hackathon[]> {
     entries.map(async entry => {
       // The proof links are a mixed bag — code, writeup, on-chain artifact — so
       // the thumbnail comes from whichever one is a repo, if any is.
-      const repo = entry.links.map(link => parseRepoRef(link.url)).find(ref => ref !== null);
+      const repo: RepoRef | undefined = entry.links
+        .map(link => parseRepoRef(link.url))
+        .find(ref => ref !== null);
 
       return {
         ...entry,
         thumbnailUrl: repo === undefined ? null : await fetchRepoThumbnail(repo),
+        projectName: repo?.repo ?? null,
       };
     }),
   );

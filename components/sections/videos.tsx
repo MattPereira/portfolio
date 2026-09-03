@@ -32,7 +32,7 @@ export async function Videos() {
                     width={480}
                     height={360}
                     sizes="(min-width: 1024px) 23vw, (min-width: 640px) 50vw, 100vw"
-                    className="aspect-video w-full object-cover lg:w-[45%]"
+                    className="aspect-video w-full rounded-t-xl object-cover lg:w-[45%] lg:rounded-l-xl lg:rounded-tr-none"
                   />
                   <CardContent className="p-4">
                     <h3 className="text-xl font-bold leading-tight group-hover:text-primary">

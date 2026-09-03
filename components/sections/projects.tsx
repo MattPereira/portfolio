@@ -26,7 +26,7 @@ export async function Projects() {
                   {project.thumbnailUrl !== null && (
                     // Repo READMEs give no dimensions, so the image fills a fixed
                     // aspect box rather than driving the layout itself.
-                    <div className="relative aspect-video w-full bg-muted">
+                    <div className="relative aspect-video w-full overflow-hidden rounded-t-xl bg-muted">
                       <Image
                         src={project.thumbnailUrl}
                         alt=""

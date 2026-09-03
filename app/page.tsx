@@ -9,8 +9,8 @@ export default function Home() {
     <>
       <Landing />
       <Experience />
-      <Videos />
       <Projects />
+      <Videos />
       <Hackathons />
     </>
   );
