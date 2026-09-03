@@ -4,7 +4,7 @@ import { SocialLinks } from "@/components/social-links";
 
 export function Landing() {
   return (
-    <section id="landing" className="scroll-mt-16 py-16 lg:py-32">
+    <section id="landing" className="scroll-mt-16 py-16 lg:pt-32 lg:pb-20">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-8 px-4 lg:flex-row">
         <Image
           src={owner.photo}
