@@ -1,15 +1,21 @@
 import { fetchProfileReadme } from "@/lib/profile-readme";
 import { requireSection } from "@/lib/readme";
+import { fetchRepoThumbnail, parseRepoRef } from "@/lib/repo-readme";
 
 export interface ProofLink {
   label: string;
   url: string;
 }
 
-export interface Hackathon {
+export interface HackathonSource {
   title: string;
   links: ProofLink[];
   date: string;
+}
+
+export interface Hackathon extends HackathonSource {
+  /** Null when no proof link is a repo, or that repo's README has no image. */
+  thumbnailUrl: string | null;
 }
 
 const HACKATHONS_HEADING = "Hackathons";
@@ -17,7 +23,7 @@ const HACKATHONS_HEADING = "Hackathons";
 /** `- Title | [Label](url) | ... | Date`: plain title, any number of links, trailing date. */
 const LINK = /^\[([^\]]+)\]\(([^)]+)\)$/;
 
-function parseEntry(line: string): Hackathon | null {
+function parseEntry(line: string): HackathonSource | null {
   const parts = line
     .replace(/^-\s+/, "")
     .split("|")
@@ -41,7 +47,7 @@ function parseEntry(line: string): Hackathon | null {
   return { title, links, date };
 }
 
-export function parseHackathons(readme: string): Hackathon[] {
+export function parseHackathons(readme: string): HackathonSource[] {
   const section = requireSection(readme, HACKATHONS_HEADING);
 
   if (section === "") return [];
@@ -63,5 +69,18 @@ export function parseHackathons(readme: string): Hackathon[] {
 }
 
 export async function getHackathons(): Promise<Hackathon[]> {
-  return parseHackathons(await fetchProfileReadme());
+  const entries = parseHackathons(await fetchProfileReadme());
+
+  return Promise.all(
+    entries.map(async entry => {
+      // The proof links are a mixed bag — code, writeup, on-chain artifact — so
+      // the thumbnail comes from whichever one is a repo, if any is.
+      const repo = entry.links.map(link => parseRepoRef(link.url)).find(ref => ref !== null);
+
+      return {
+        ...entry,
+        thumbnailUrl: repo === undefined ? null : await fetchRepoThumbnail(repo),
+      };
+    }),
+  );
 }

@@ -1,6 +1,11 @@
 import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { fetchRepoReadme, findThumbnailUrl, parseRepoRef } from "@/lib/repo-readme";
+import {
+  fetchRepoReadme,
+  findThumbnailUrl,
+  parseRepoRef,
+  resolveImageUrl,
+} from "@/lib/repo-readme";
 
 /** Committed snapshots of the real linked repos, so tests break when their shape drifts. */
 function fixture(name: string): string {
@@ -64,6 +69,10 @@ describe("findThumbnailUrl", () => {
     expect(findThumbnailUrl("![shot](docs/one.png)\n<img src='./two.png' />")).toBeNull();
   });
 
+  it("holds no opinion about a README with only committed images", () => {
+    expect(findThumbnailUrl(fixture("fundguys"))).toBeNull();
+  });
+
   it("takes whichever syntax appears first", () => {
     const markdown = "<img src='https://example.com/first.png' />\n\n![alt](https://e.com/2.png)";
 
@@ -72,6 +81,28 @@ describe("findThumbnailUrl", () => {
 
   it("returns null for a README with no image", () => {
     expect(findThumbnailUrl("# Title\n\nProse and a [link](https://example.com).")).toBeNull();
+  });
+});
+
+describe("resolveImageUrl", () => {
+  const ref = { owner: "MattPereira", repo: "FundGuys" };
+
+  it("resolves a relative path against the raw content host and branch", () => {
+    expect(resolveImageUrl("./packages/nextjs/public/thumbnail.jpg", ref, "main")).toBe(
+      "https://raw.githubusercontent.com/MattPereira/FundGuys/main/packages/nextjs/public/thumbnail.jpg",
+    );
+  });
+
+  it("resolves against the branch the README came from", () => {
+    expect(resolveImageUrl("assets/logo.svg", ref, "master")).toBe(
+      "https://raw.githubusercontent.com/MattPereira/FundGuys/master/assets/logo.svg",
+    );
+  });
+
+  it("drops a leading slash rather than doubling it", () => {
+    expect(resolveImageUrl("/hero.png", ref, "main")).toBe(
+      "https://raw.githubusercontent.com/MattPereira/FundGuys/main/hero.png",
+    );
   });
 });
 
@@ -99,7 +130,10 @@ describe("fetchRepoReadme", () => {
   it("reads main without asking for master", async () => {
     const fetched = stubBranches("main");
 
-    expect(await fetchRepoReadme({ owner: "MattPereira", repo: "holdsight" })).toBe("# On main");
+    expect(await fetchRepoReadme({ owner: "MattPereira", repo: "holdsight" })).toEqual({
+      markdown: "# On main",
+      branch: "main",
+    });
     expect(fetched).toEqual([
       "https://raw.githubusercontent.com/MattPereira/holdsight/main/README.md",
     ]);
@@ -108,7 +142,10 @@ describe("fetchRepoReadme", () => {
   it("falls back to master when there is no main", async () => {
     stubBranches("master");
 
-    expect(await fetchRepoReadme({ owner: "MattPereira", repo: "old-repo" })).toBe("# On master");
+    expect(await fetchRepoReadme({ owner: "MattPereira", repo: "old-repo" })).toEqual({
+      markdown: "# On master",
+      branch: "master",
+    });
   });
 
   it("returns null when neither branch has a README", async () => {
