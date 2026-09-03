@@ -1,11 +1,6 @@
 import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import {
-  fetchRepoReadme,
-  findFirstImageSrc,
-  parseRepoRef,
-  resolveImageUrl,
-} from "@/lib/repo-readme";
+import { fetchRepoReadme, findThumbnailUrl, parseRepoRef } from "@/lib/repo-readme";
 
 /** Committed snapshots of the real linked repos, so tests break when their shape drifts. */
 function fixture(name: string): string {
@@ -39,59 +34,44 @@ describe("parseRepoRef", () => {
   });
 });
 
-describe("findFirstImageSrc", () => {
+describe("findThumbnailUrl", () => {
   it("reads a raw HTML image tag", () => {
-    expect(findFirstImageSrc(fixture("open-caddie"))).toBe(
+    expect(findThumbnailUrl(fixture("open-caddie"))).toBe(
       "https://github.com/user-attachments/assets/7849fec4-f2cc-44e6-964b-372c134c9007",
     );
   });
 
   it("reads markdown image syntax", () => {
-    expect(findFirstImageSrc(fixture("scaffold-balancer-v3"))).toBe(
+    expect(findThumbnailUrl(fixture("scaffold-balancer-v3"))).toBe(
       "https://github.com/user-attachments/assets/2f7538cf-d252-43be-9a9a-c8b84a37349c",
     );
   });
 
-  it("reads a repo-relative path", () => {
-    expect(findFirstImageSrc(fixture("holdsight"))).toBe("public/screenshots/theses.png");
+  it("takes the hero of a README whose later images are committed screenshots", () => {
+    expect(findThumbnailUrl(fixture("open-caddie"))).not.toContain("public/screenshots");
+    expect(findThumbnailUrl(fixture("holdsight"))).toContain(
+      "https://github.com/user-attachments/assets/",
+    );
+  });
+
+  it("skips images committed in the repo and keeps looking", () => {
+    const markdown = "![shot](public/screenshots/theses.png)\n\n![hero](https://example.com/a.png)";
+
+    expect(findThumbnailUrl(markdown)).toBe("https://example.com/a.png");
+  });
+
+  it("returns null when every image lives inside the repo", () => {
+    expect(findThumbnailUrl("![shot](docs/one.png)\n<img src='./two.png' />")).toBeNull();
   });
 
   it("takes whichever syntax appears first", () => {
-    const markdown = "<img src='first.png' />\n\n![alt](second.png)";
+    const markdown = "<img src='https://example.com/first.png' />\n\n![alt](https://e.com/2.png)";
 
-    expect(findFirstImageSrc(markdown)).toBe("first.png");
+    expect(findThumbnailUrl(markdown)).toBe("https://example.com/first.png");
   });
 
   it("returns null for a README with no image", () => {
-    expect(findFirstImageSrc("# Title\n\nProse and a [link](https://example.com).")).toBeNull();
-  });
-});
-
-describe("resolveImageUrl", () => {
-  const ref = { owner: "MattPereira", repo: "holdsight" };
-
-  it("passes absolute URLs through unchanged, redirect and all", () => {
-    const attachment = "https://github.com/user-attachments/assets/7849fec4";
-
-    expect(resolveImageUrl(attachment, ref, "main")).toBe(attachment);
-  });
-
-  it("resolves a relative path against the raw content host and branch", () => {
-    expect(resolveImageUrl("public/screenshots/theses.png", ref, "main")).toBe(
-      "https://raw.githubusercontent.com/MattPereira/holdsight/main/public/screenshots/theses.png",
-    );
-  });
-
-  it("resolves against the branch the README came from", () => {
-    expect(resolveImageUrl("./docs/hero.png", ref, "master")).toBe(
-      "https://raw.githubusercontent.com/MattPereira/holdsight/master/docs/hero.png",
-    );
-  });
-
-  it("drops a leading slash rather than doubling it", () => {
-    expect(resolveImageUrl("/hero.png", ref, "main")).toBe(
-      "https://raw.githubusercontent.com/MattPereira/holdsight/main/hero.png",
-    );
+    expect(findThumbnailUrl("# Title\n\nProse and a [link](https://example.com).")).toBeNull();
   });
 });
 
@@ -119,10 +99,7 @@ describe("fetchRepoReadme", () => {
   it("reads main without asking for master", async () => {
     const fetched = stubBranches("main");
 
-    expect(await fetchRepoReadme({ owner: "MattPereira", repo: "holdsight" })).toEqual({
-      markdown: "# On main",
-      branch: "main",
-    });
+    expect(await fetchRepoReadme({ owner: "MattPereira", repo: "holdsight" })).toBe("# On main");
     expect(fetched).toEqual([
       "https://raw.githubusercontent.com/MattPereira/holdsight/main/README.md",
     ]);
@@ -131,10 +108,7 @@ describe("fetchRepoReadme", () => {
   it("falls back to master when there is no main", async () => {
     stubBranches("master");
 
-    expect(await fetchRepoReadme({ owner: "MattPereira", repo: "old-repo" })).toEqual({
-      markdown: "# On master",
-      branch: "master",
-    });
+    expect(await fetchRepoReadme({ owner: "MattPereira", repo: "old-repo" })).toBe("# On master");
   });
 
   it("returns null when neither branch has a README", async () => {
