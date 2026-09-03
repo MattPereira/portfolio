@@ -1,6 +1,6 @@
 import { fetchProfileReadme } from "@/lib/profile-readme";
 import { parseLinkedListItems, requireSection, type LinkedListItem } from "@/lib/readme";
-import { fetchRepoThumbnail, parseRepoRef, type RepoRef } from "@/lib/repo-readme";
+import { fetchRepoThumbnail, parseRepoRef, type RepoRef, type Thumbnail } from "@/lib/repo-readme";
 
 export interface ProjectSource extends LinkedListItem {
   repo: RepoRef;
@@ -8,7 +8,7 @@ export interface ProjectSource extends LinkedListItem {
 
 export interface Project extends ProjectSource {
   /** Null when the linked repo's README has no image; the card renders without one. */
-  thumbnailUrl: string | null;
+  thumbnail: Thumbnail | null;
 }
 
 const PROJECTS_HEADING = "Projects";
@@ -36,7 +36,7 @@ export async function getProjects(): Promise<Project[]> {
   return Promise.all(
     projects.map(async project => ({
       ...project,
-      thumbnailUrl: await fetchRepoThumbnail(project.repo),
+      thumbnail: await fetchRepoThumbnail(project.repo),
     })),
   );
 }

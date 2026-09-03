@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { RepoThumbnail } from "@/components/repo-thumbnail";
 import { Section } from "@/components/section";
 import { Card, CardContent } from "@/components/ui/card";
 import { getProjects } from "@/lib/projects";
@@ -23,14 +23,12 @@ export async function Projects() {
                 className="group block h-full rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 <Card className="h-full gap-0 overflow-hidden py-0 ring-2 ring-foreground/20">
-                  {project.thumbnailUrl !== null && (
+                  {project.thumbnail !== null && (
                     // Repo READMEs give no dimensions, so the image fills a fixed
                     // aspect box rather than driving the layout itself.
                     <div className="relative aspect-video w-full overflow-hidden rounded-t-xl bg-muted">
-                      <Image
-                        src={project.thumbnailUrl}
-                        alt=""
-                        fill
+                      <RepoThumbnail
+                        thumbnail={project.thumbnail}
                         sizes="(min-width: 1024px) 31vw, (min-width: 640px) 50vw, 100vw"
                         className="object-cover"
                       />

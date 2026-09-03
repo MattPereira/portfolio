@@ -1,6 +1,6 @@
 import { fetchProfileReadme } from "@/lib/profile-readme";
 import { requireSection } from "@/lib/readme";
-import { fetchRepoThumbnail, parseRepoRef, type RepoRef } from "@/lib/repo-readme";
+import { fetchRepoThumbnail, parseRepoRef, type RepoRef, type Thumbnail } from "@/lib/repo-readme";
 
 export interface ProofLink {
   label: string;
@@ -15,7 +15,7 @@ export interface HackathonSource {
 
 export interface Hackathon extends HackathonSource {
   /** Null when no proof link is a repo, or that repo's README has no image. */
-  thumbnailUrl: string | null;
+  thumbnail: Thumbnail | null;
   /** The linked repo's name, or null when no proof link is a repo. */
   projectName: string | null;
 }
@@ -83,7 +83,7 @@ export async function getHackathons(): Promise<Hackathon[]> {
 
       return {
         ...entry,
-        thumbnailUrl: repo === undefined ? null : await fetchRepoThumbnail(repo),
+        thumbnail: repo === undefined ? null : await fetchRepoThumbnail(repo),
         projectName: repo?.repo ?? null,
       };
     }),

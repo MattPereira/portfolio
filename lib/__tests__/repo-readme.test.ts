@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   fetchRepoReadme,
+  findColorSchemeVariants,
   findThumbnailUrl,
   parseRepoRef,
   resolveImageUrl,
@@ -152,5 +153,45 @@ describe("fetchRepoReadme", () => {
     stubBranches();
 
     expect(await fetchRepoReadme({ owner: "MattPereira", repo: "no-readme" })).toBeNull();
+  });
+});
+
+describe("findColorSchemeVariants", () => {
+  const picture = `<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/logo.svg">
+  <source media="(prefers-color-scheme: light)" srcset="assets/logo-black.svg">
+  <img alt="upDev" src="assets/logo.svg">
+</picture>`;
+
+  it("reads both sources of a picture, keyed by its fallback image", () => {
+    expect(findColorSchemeVariants(picture).get("assets/logo.svg")).toEqual({
+      light: "assets/logo-black.svg",
+      dark: "assets/logo.svg",
+    });
+  });
+
+  it("falls back to the img for a scheme the picture does not cover", () => {
+    const markdown = `<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="dark.svg">
+  <img src="hero.svg">
+</picture>`;
+
+    expect(findColorSchemeVariants(markdown).get("hero.svg")).toEqual({
+      light: "hero.svg",
+      dark: "dark.svg",
+    });
+  });
+
+  it("drops a srcset descriptor and takes the first candidate", () => {
+    const markdown = `<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="dark.png 1x, dark@2x.png 2x">
+  <img src="hero.png">
+</picture>`;
+
+    expect(findColorSchemeVariants(markdown).get("hero.png")?.dark).toBe("dark.png");
+  });
+
+  it("holds nothing for a README with no picture", () => {
+    expect(findColorSchemeVariants("![hero](https://example.com/a.png)").size).toBe(0);
   });
 });

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { RepoThumbnail } from "@/components/repo-thumbnail";
 import { Section } from "@/components/section";
 import { Card, CardContent } from "@/components/ui/card";
 import { getHackathons } from "@/lib/hackathons";
@@ -17,19 +17,17 @@ export async function Hackathons() {
           {hackathons.map(hackathon => (
             <li key={`${hackathon.title}-${hackathon.date}`}>
               <Card className="h-full gap-0 overflow-hidden py-0 ring-2 ring-foreground/20 lg:flex-row">
-                {hackathon.thumbnailUrl !== null && (
+                {hackathon.thumbnail !== null && (
                   // Repo READMEs give no dimensions, so the image fills a fixed
                   // aspect box rather than driving the layout itself. An SVG is a
                   // wordmark or logo often enough that cropping one looks broken,
                   // so those are fitted whole instead.
                   <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-t-xl bg-muted lg:aspect-auto lg:w-[45%] lg:rounded-l-xl lg:rounded-tr-none">
-                    <Image
-                      src={hackathon.thumbnailUrl}
-                      alt=""
-                      fill
+                    <RepoThumbnail
+                      thumbnail={hackathon.thumbnail}
                       sizes="(min-width: 1024px) 23vw, (min-width: 640px) 50vw, 100vw"
                       className={
-                        hackathon.thumbnailUrl.endsWith(".svg")
+                        hackathon.thumbnail.light.endsWith(".svg")
                           ? "object-contain p-6"
                           : "object-cover"
                       }
