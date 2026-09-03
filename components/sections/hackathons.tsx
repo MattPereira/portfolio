@@ -39,14 +39,19 @@ export async function Hackathons() {
                 <CardContent className="p-4">
                   <h3 className="text-xl font-bold leading-tight">{hackathon.title}</h3>
                   <p className="text-base text-muted-foreground">{hackathon.date}</p>
-                  <ul className="mt-3 flex flex-wrap gap-2">
+                  {/*
+                    Equal shares of the card width, however many proof links an
+                    entry has. Grid rather than flex: flex would clamp each link
+                    at its own label width, leaving the widest one bigger.
+                  */}
+                  <ul className="mt-3 grid grid-flow-col auto-cols-fr gap-2">
                     {hackathon.links.map(link => (
                       <li key={link.url}>
                         <a
                           href={link.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex rounded-lg px-3 py-1.5 text-base font-bold ring-2 ring-foreground/20 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                          className="flex w-full items-center justify-center rounded-lg px-3 py-1.5 text-base font-bold ring-2 ring-foreground/20 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                         >
                           {link.label}
                         </a>
