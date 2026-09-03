@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { resumeUrl, sections } from "@/lib/site-content";
+import { MobileNav } from "@/components/mobile-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export function SiteHeader() {
@@ -9,7 +10,9 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link href="#landing" aria-label="Back to top" className="shrink-0">
+        <MobileNav />
+
+        <Link href="#landing" aria-label="Back to top" className="hidden shrink-0 lg:block">
           <Image src="/logo.svg" alt="" width={36} height={36} className="size-9 dark:invert" />
         </Link>
 
