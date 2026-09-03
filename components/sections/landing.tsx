@@ -12,15 +12,15 @@ export function Landing() {
           width={500}
           height={500}
           priority
-          sizes="(min-width: 1280px) 384px, (min-width: 640px) 288px, 224px"
-          className="size-56 rounded-full object-cover sm:size-72 xl:size-96"
+          sizes="(min-width: 1280px) 320px, (min-width: 640px) 256px, 240px"
+          className="size-60 rounded-full object-cover sm:size-64 xl:size-80"
         />
 
         <div className="flex flex-col items-center lg:items-start">
           <h1 className="mb-3 rounded-2xl bg-primary px-6 py-4 text-center font-heading text-4xl text-primary-foreground sm:text-5xl md:text-6xl xl:text-7xl">
             {owner.name}
           </h1>
-          <h2 className="mb-4 text-center font-heading text-2xl sm:text-3xl xl:text-4xl lg:text-left">
+          <h2 className="mb-4 text-center font-heading text-3xl sm:text-4xl xl:text-5xl lg:text-left">
             {owner.role}
           </h2>
           <SocialLinks
