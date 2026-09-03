@@ -44,6 +44,20 @@ export function findSection(markdown: string, heading: string): string {
   return (end === -1 ? rest : rest.slice(0, end)).join("\n").trim();
 }
 
+/**
+ * `findSection`, but a missing section is reported once here rather than in
+ * every caller: each section owns a heading it expects the README to carry.
+ */
+export function requireSection(markdown: string, heading: string): string {
+  const section = findSection(markdown, heading);
+
+  if (section === "") {
+    console.error(`[readme] no "${heading}" section found in the profile README`);
+  }
+
+  return section;
+}
+
 /** Every `- [Title](url) – Description` line in `section`, in README order. */
 export function parseLinkedListItems(section: string): LinkedListItem[] {
   return section

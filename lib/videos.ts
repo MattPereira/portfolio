@@ -1,5 +1,5 @@
 import { fetchProfileReadme } from "@/lib/profile-readme";
-import { findSection, parseLinkedListItems, type LinkedListItem } from "@/lib/readme";
+import { parseLinkedListItems, requireSection, type LinkedListItem } from "@/lib/readme";
 
 export interface Video extends LinkedListItem {
   youtubeId: string;
@@ -16,12 +16,9 @@ function extractYouTubeId(url: string): string | null {
 }
 
 export function parseVideos(readme: string): Video[] {
-  const section = findSection(readme, VIDEOS_HEADING);
+  const section = requireSection(readme, VIDEOS_HEADING);
 
-  if (section === "") {
-    console.error(`[readme] no "${VIDEOS_HEADING}" section found in the profile README`);
-    return [];
-  }
+  if (section === "") return [];
 
   return parseLinkedListItems(section).flatMap(item => {
     const youtubeId = extractYouTubeId(item.url);
