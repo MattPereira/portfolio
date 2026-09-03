@@ -16,18 +16,18 @@ export async function Hackathons() {
         <ul className="grid auto-rows-fr gap-6 sm:grid-cols-2">
           {hackathons.map(hackathon => (
             <li key={`${hackathon.title}-${hackathon.date}`}>
-              <Card className="h-full gap-0 overflow-hidden py-0 ring-2 ring-foreground/20">
+              <Card className="h-full gap-0 overflow-hidden py-0 ring-2 ring-foreground/20 lg:flex-row">
                 {hackathon.thumbnailUrl !== null && (
                   // Repo READMEs give no dimensions, so the image fills a fixed
                   // aspect box rather than driving the layout itself. An SVG is a
                   // wordmark or logo often enough that cropping one looks broken,
                   // so those are fitted whole instead.
-                  <div className="relative aspect-video w-full bg-muted">
+                  <div className="relative aspect-video w-full shrink-0 bg-muted lg:aspect-auto lg:w-[45%]">
                     <Image
                       src={hackathon.thumbnailUrl}
                       alt=""
                       fill
-                      sizes="(min-width: 640px) 50vw, 100vw"
+                      sizes="(min-width: 1024px) 23vw, (min-width: 640px) 50vw, 100vw"
                       className={
                         hackathon.thumbnailUrl.endsWith(".svg")
                           ? "object-contain p-6"
