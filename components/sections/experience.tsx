@@ -8,10 +8,10 @@ export function Experience() {
       <div className="mx-auto max-w-6xl px-4">
         <h2 className="mb-8 text-center font-heading text-4xl sm:text-5xl">Experience</h2>
 
-        <ul className="mx-auto flex max-w-4xl flex-col gap-6">
+        <ul className="mx-auto grid max-w-4xl gap-6 lg:max-w-none lg:grid-cols-3">
           {roles.map(role => (
             <li key={`${role.employer}-${role.title}`}>
-              <Card className="ring-2 ring-foreground/20">
+              <Card className="h-full ring-2 ring-foreground/20">
                 <CardHeader className="flex flex-row items-center gap-4">
                   {/* Logos are dark artwork, so they get a light tile to stay legible in dark mode. */}
                   <div className="flex size-16 shrink-0 items-center justify-center rounded-lg bg-white p-2 sm:size-20">
