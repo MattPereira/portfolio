@@ -15,8 +15,8 @@ export function ThemeToggle() {
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
     >
       {/* Both icons render server-side and are swapped by CSS, so the button never waits on hydration to show the right one. */}
-      <Sun className="size-5 dark:hidden" />
-      <Moon className="hidden size-5 dark:block" />
+      <Sun className="size-6 dark:hidden" />
+      <Moon className="hidden size-6 dark:block" />
     </Button>
   );
 }

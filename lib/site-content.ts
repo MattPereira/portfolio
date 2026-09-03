@@ -31,7 +31,6 @@ export const resumeUrl =
   "https://docs.google.com/document/d/1GAvP7iTx6E8Cr7cIe9kg5amQnEYF6r8WjV8-FUUTBrk/edit?usp=sharing";
 
 export const sections: SectionLink[] = [
-  { id: "landing", label: "Home" },
   { id: "experience", label: "Experience" },
   { id: "videos", label: "Videos" },
   { id: "projects", label: "Projects" },
@@ -46,7 +45,10 @@ export const socials: SocialLink[] = [
 ];
 
 export const siteMetadata = {
-  title: `${owner.name} | ${owner.role}`,
+  /** Browser tab title: name only, so it stays readable in a narrow tab. */
+  title: owner.name,
+  /** Longer title for link previews, where there is room for the role. */
+  socialTitle: `${owner.name} | ${owner.role}`,
   description: owner.tagline,
   ogImage: "/thumbnail.jpg",
 } as const;

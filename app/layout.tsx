@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: siteMetadata.title,
   description: siteMetadata.description,
   openGraph: {
-    title: siteMetadata.title,
+    title: siteMetadata.socialTitle,
     description: siteMetadata.description,
     url: siteUrl,
     siteName: owner.name,
@@ -20,12 +20,15 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: siteMetadata.title,
+    title: siteMetadata.socialTitle,
     description: siteMetadata.description,
     images: [siteMetadata.ogImage],
   },
   icons: {
-    icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.png", sizes: "256x256", type: "image/png" },
+    ],
   },
 };
 
