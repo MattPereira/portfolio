@@ -14,21 +14,20 @@ export function Experience() {
               <Card className="h-full ring-2 ring-foreground/20">
                 <CardHeader className="flex flex-row items-center gap-4">
                   {/* Logos are dark artwork, so they get a light tile to stay legible in dark mode. */}
-                  <div className="flex size-16 shrink-0 items-center justify-center rounded-lg bg-white p-2 sm:size-20">
+                  <div className="flex size-20 shrink-0 items-center justify-center rounded-xl bg-white p-3">
                     <Image
                       src={role.logo.src}
                       alt={role.logo.alt}
-                      width={80}
-                      height={80}
-                      sizes="80px"
-                      className="h-auto w-full object-contain"
+                      width={112}
+                      height={112}
+                      sizes="112px"
+                      className="size-full object-contain"
+                      style={{ scale: role.logo.scale }}
                     />
                   </div>
-                  <div className="min-w-0">
-                    <h3 className="font-heading text-2xl leading-tight sm:text-3xl">
-                      {role.employer}
-                    </h3>
-                    <p className="text-lg text-muted-foreground">{role.title}</p>
+                  <div className="flex min-w-0 flex-col justify-center">
+                    <h3 className="text-2xl font-bold leading-tight">{role.title}</h3>
+                    <p className="text-xl text-muted-foreground">{role.employer}</p>
                   </div>
                 </CardHeader>
 

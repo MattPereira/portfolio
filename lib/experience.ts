@@ -6,6 +6,11 @@
 export interface RoleLogo {
   src: string;
   alt: string;
+  /**
+   * Optical size correction. A rotated mark's bounding box is larger than its
+   * visual body, so object-contain renders it smaller than square marks beside it.
+   */
+  scale?: number;
 }
 
 export interface Role {
@@ -22,20 +27,20 @@ export const roles: Role[] = [
     title: "Software Engineer",
     logo: { src: "/balancer.svg", alt: "Balancer Labs logo" },
     summary:
-      "Built the liquidity pool creation interface, abstracting Balancer V3's configuration parameters into a guided multi-step form, and shipped pool creation and liquidity operations through the Balancer SDK with unit and integration test coverage. Created a Scaffold-ETH starter kit for prototyping custom pools and hooks that earned over 100 GitHub stars, and produced the developer documentation and video series teaching the stack. Strengthened the frontend monorepo's CI pipeline, and reviewed ERC-4626 tokens and rate providers for compatibility with the V3 vault.",
+      "Abstracted pool configuration into a multi-step UI, and shipped pool creation and liquidity operations in the SDK with unit and integration tests. Built a Scaffold-ETH starter kit for V3 pools and hooks (100+ stars), docs, and videos. Deepened monorepo CI coverage; reviewed ERC-4626 and rate provider contracts for vault compatibility.",
   },
   {
     employer: "Buidl Guidl",
-    title: "Full Stack Web3 Developer",
-    logo: { src: "/buidlguidl.svg", alt: "Buidl Guidl logo" },
+    title: "Full Stack Developer",
+    logo: { src: "/buidlguidl-icon.svg", alt: "Buidl Guidl logo" },
     summary:
-      "Built Speedrun Chainlink, an interactive Scaffold-ETH tutorial dapp teaching developers to integrate Chainlink price feeds, VRF, and automation into their own smart contracts. Used the Ponder indexing framework to query on-chain data and aggregate member funding stream totals across cohort contracts, then surfaced the results in a paginated, sortable frontend. Mentored community members through technical blockers spanning smart contract design and dapp architecture, and contributed to the Sanctum cohort stream alongside other builders shipping open source Ethereum tooling.",
+      "Built an interactive Scaffold-ETH tutorial dapp teaching developers to integrate Chainlink price feeds, VRF, and automation into smart contracts. Used the Ponder framework to index on-chain data, aggregating funding stream totals for display on the frontend. Mentored community members through technical blockers spanning smart contracts and dapp architecture.",
   },
   {
     employer: "Hack For LA",
-    title: "Full Stack Web Developer",
-    logo: { src: "/hfla.png", alt: "Hack For LA logo" },
+    title: "Full Stack Developer",
+    logo: { src: "/hfla-icon.png", alt: "Hack For LA logo", scale: 1.25 },
     summary:
-      "Volunteered as a software engineer on open source civic technology serving the greater Los Angeles community. Implemented Figma designs in React, TypeScript, and Sass for Civic Tech Jobs, a platform matching volunteers to projects, and built front-end forms and fixed Express server bugs for a volunteer relationship management system. Collaborated with other developers, designers, and project managers across both codebases, working within the code review and release process of a distributed, fully remote volunteer team.",
+      "Implemented Figma designs in React, TypeScript, and Sass for a volunteer matching platform, turning design handoffs into the interfaces volunteers used. Built front-end forms and fixed Express server bugs for a separate volunteer relationship management system, working across both its client interface and its Node server.",
   },
 ];
