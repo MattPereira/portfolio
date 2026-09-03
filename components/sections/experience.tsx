@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { formatRoleDates, roles } from "@/lib/experience";
+import { roles } from "@/lib/experience";
 
 export function Experience() {
   return (
@@ -24,25 +24,16 @@ export function Experience() {
                       className="h-auto w-full object-contain"
                     />
                   </div>
-                  <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-                    <div className="min-w-0">
-                      <h3 className="font-heading text-2xl leading-tight sm:text-3xl">
-                        {role.employer}
-                      </h3>
-                      <p className="text-lg text-muted-foreground">{role.title}</p>
-                    </div>
-                    <p className="text-base text-muted-foreground sm:whitespace-nowrap">
-                      {formatRoleDates(role)}
-                    </p>
+                  <div className="min-w-0">
+                    <h3 className="font-heading text-2xl leading-tight sm:text-3xl">
+                      {role.employer}
+                    </h3>
+                    <p className="text-lg text-muted-foreground">{role.title}</p>
                   </div>
                 </CardHeader>
 
                 <CardContent>
-                  <ul className="list-disc space-y-2 pl-5 text-base">
-                    {role.accomplishments.map(accomplishment => (
-                      <li key={accomplishment}>{accomplishment}</li>
-                    ))}
-                  </ul>
+                  <p className="text-base">{role.summary}</p>
                 </CardContent>
               </Card>
             </li>
