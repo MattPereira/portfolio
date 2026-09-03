@@ -20,15 +20,15 @@ Completion: exactly three employers named.
 
 ## Write the summaries
 
-One paragraph per role, replacing that role's bullets. Each paragraph:
+One paragraph per role, replacing that role's existing summary. Each paragraph:
 
-- Runs to 100 words or fewer, and lands within 10 words of the other two — a visitor scanning three cards should see three blocks of the same weight.
-- Carries every bullet's substance. Where a role's bullets are too thin to fill a paragraph of matching weight, draw on the owner's own published copy about that role — the prior site's Experience text in git history, or the linked repos. Invent nothing.
+- Runs to 50 words or fewer, and lands within 5 words of the other two — a visitor scanning three cards should see three blocks of the same weight.
+- Carries every bullet's substance, and nothing the resume does not claim.
 - Names the concrete work — the products, protocols, and tools — in prose. Third person is implied throughout the file, so the subject is dropped: "Built X and shipped Y", not "I built X".
 
 Count the words of each paragraph and print the three counts. A paragraph outside the bounds gets rewritten before you move on.
 
-Completion: three counts printed, each ≤100, spread ≤10.
+Completion: three counts printed, each ≤50, spread ≤5.
 
 ## Update the file
 
